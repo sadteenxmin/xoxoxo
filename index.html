@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feliz 1 año 💗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffe4f1, #fff5fb);
+      color: #3b2a36;
+    }
+
+    .container {
+      width: min(420px, 100%);
+      padding: 24px 20px 28px;
+    }
+
+    .screen {
+      display: none;
+      background: #ffffffcc;
+      border-radius: 24px;
+      padding: 24px 20px 28px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+      color: #c23a7c;
+    }
+
+    p.subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    /* Candado corazón */
+    .lock-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin: 10px 0 20px;
+    }
+
+    .heart-lock {
+      position: relative;
+      width: 150px;
+      height: 130px;
+      background: linear-gradient(135deg, #ff6fa9, #ffb3cc);
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: 0 10px 25px rgba(226, 76, 134, 0.45);
+    }
+
+    .heart-lock::before {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 120px;
+      bottom: -55px;
+      left: 0;
+      border-radius: 50% 50% 50% 50%;
+      background: linear-gradient(135deg, #ff6fa9, #ffb3cc);
+    }
+
+    .lock-arch {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 80px;
+      border-radius: 45px 45px 0 0;
+      border: 12px solid #ff8fb8;
+      border-bottom: none;
+      top: -60px;
+      box-shadow: 0 4px 10px rgba(196, 68, 123, 0.3);
+      background: #ffe4f1;
+    }
+
+    .lock-text {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "Georgia", serif;
+      font-size: 0.72rem;
+      text-align: center;
+      color: #fff7fb;
+      text-shadow: 0 1px 2px rgba(183, 36, 94, 0.6);
+    }
+
+    .code-input {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-input label {
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .code-input input {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #f2a6c7;
+      outline: none;
+      font-size: 1rem;
+      text-align: center;
+      background: #fff9fd;
+      width: 190px;
+      letter-spacing: 0.12em;
+    }
+
+    .code-input small {
+      font-size: 0.78rem;
+      color: #8b5874;
+    }
+
+    button {
+      margin-top: 10px;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff6fa9, #ff94bf);
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(220, 70, 134, 0.5);
+      transition: transform 0.09s ease, box-shadow 0.09s ease;
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(220, 70, 134, 0.4);
+    }
+
+    .error-msg {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #d0345b;
+      min-height: 16px;
+    }
+
+    /* Carta */
+    .card {
+      background: #fff9fd;
+      border-radius: 20px;
+      padding: 18px 16px 20px;
+      border: 2px solid #ffb3cc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 14px;
+      border: 1px dashed #ff8fb8;
+      pointer-events: none;
+    }
+
+    .card-header {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e04588;
+      margin-bottom: 10px;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #4a3241;
+      white-space: pre-line;
+    }
+
+    .card-footer {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #c23a7c;
+    }
+
+    .scratch-title {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .scratch-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 260px;
+      margin: 0 auto;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .scratch-wrapper img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .hint {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #7e4e67;
+    }
+
+    @media (max-width: 480px) {
+      .screen {
+        padding: 20px 16px 24px;
+      }
+
+      .heart-lock {
+        transform: scale(0.9);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- PANTALLA 1: candado -->
+    <section id="lock-screen" class="screen active">
+      <h1>pov: es nuestro aniversario pero estamos lejos 🩷</h1>
+      <p class="subtitle">Desbloquea el candado con la fecha en que te pedí andar conmigo.</p>
+
+      <div class="lock-wrapper">
+        <div class="heart-lock">
+          <div class="lock-arch"></div>
+          <div class="lock-text">The day we got together</div>
+        </div>
+
+        <div class="code-input">
+          <label for="code">Escribe la fecha así: ddmmaaaa</label>
+          <input id="code" type="password" maxlength="8" autocomplete="off" />
+          <small>pista: 30 de noviembre de 2024 😉</small>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button id="unlock-btn">Desbloquear</button>
+        <div id="error" class="error-msg"></div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: carta + scratch QR -->
+    <section id="card-screen" class="screen">
+      <div class="card">
+        <div class="card-header">Happy 1 year of andantes 💗</div>
+        <div class="card-body">
+Un año desde que te pedí andar conmigo el 30/11/2024.
+Aunque hoy estoy enterrada estudiando, no quería dejar pasar este día sin dejarte algo solo tuyo.
+
+Gracias por apañarme incluso cuando desaparezco por pruebas, por hacerme reír cuando estoy colapsada y por quererme incluso en versión zombie.
+
+Prometo que cuando termine todo esto vamos a celebrar este año como se merece.
+
+Te quiero mucho, andante mío.
+        </div>
+        <div class="card-footer">
+          Raspa el regalo y escanea el código 🫶
+        </div>
+      </div>
+
+      <p class="scratch-title">Scratch aquí para ver tu sorpresa 🎁</p>
+
+      <div class="scratch-wrapper">
+        <!-- TU QR -->
+        <img src="qr.png" alt="Código QR Spotify" />
+        <canvas id="scratch-canvas"></canvas>
+      </div>
+
+      <p class="hint">Usa tu dedo (en el celu) o el mouse (en el compu) para raspar.</p>
+    </section>
+  </div>
+
+  <script>
+    // CONTRASEÑA (30/11/2024 -> 30112024)
+    const SECRET_CODE = "30112024";
+
+    // Link directo por si quieres abrir la playlist también desde aquí (no se ve, solo por si acaso)
+    const SPOTIFY_URL = "https://open.spotify.com/playlist/3Ji8RnibdqqMGuVfddsVVs?si=IB1EAll9Q1q9lqKqjEoG6g&pi=9h-OIp25QBiYB";
+
+    const codeInput = document.getElementById("code");
+    const unlockBtn = document.getElementById("unlock-btn");
+    const errorMsg = document.getElementById("error");
+    const lockScreen = document.getElementById("lock-screen");
+    const cardScreen = document.getElementById("card-screen");
+
+    function checkCode() {
+      const value = (codeInput.value || "").trim();
+      if (value === SECRET_CODE) {
+        lockScreen.classList.remove("active");
+        cardScreen.classList.add("active");
+      } else {
+        errorMsg.textContent = "Ups, esa no es la fecha correcta 🥲";
+        setTimeout(() => { errorMsg.textContent = ""; }, 2000);
+      }
+    }
+
+    unlockBtn.addEventListener("click", checkCode);
+    codeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkCode();
+    });
+
+    // SCRATCH CARD
+    const canvas = document.getElementById("scratch-canvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      ctx.globalCompositeOperation = "source-over";
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, "#d8c1ff");
+      gradient.addColorStop(1, "#ffb6d1");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.font = "bold 16px system-ui, -apple-system, BlinkMacSystemFont";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("raspa aquí ✨", canvas.width / 2, canvas.height / 2);
+    }
+
+    let isDrawing = false;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches && e.touches.length > 0) {
+        return {
+          x: e.touches[0].clientX - rect.left,
+          y: e.touches[0].clientY - rect.top
+        };
+      } else {
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+    }
+
+    function startDraw(e) {
+      e.preventDefault();
+      isDrawing = true;
+    }
+
+    function endDraw(e) {
+      e && e.preventDefault();
+      isDrawing = false;
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pos = getPos(e);
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 18, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", endDraw);
+    canvas.addEventListener("mouseleave", endDraw);
+
+    canvas.addEventListener("touchstart", startDraw, { passive: false });
+    canvas.addEventListener("touchmove", draw, { passive: false });
+    canvas.addEventListener("touchend", endDraw, { passive: false });
+    canvas.addEventListener("touchcancel", endDraw, { passive: false });
+
+    resizeCanvas();
+  </script>
+</body>
+</html>
